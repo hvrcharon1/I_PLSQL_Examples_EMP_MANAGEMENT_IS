@@ -31,5 +31,4 @@ BEGIN
 EXCEPTION
     WHEN INVALID_CHANGE THEN
       RAISE_APPLICATION_ERROR(-20222,'Salary cannot be changed within 3 months of previous change');             
-    
 END;

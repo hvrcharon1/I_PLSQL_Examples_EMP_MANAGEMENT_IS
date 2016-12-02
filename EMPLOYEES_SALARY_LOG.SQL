@@ -8,6 +8,7 @@ NEW_SALARY       NUMBER(5)
 CHANGED          DATE  
 
 ----------------------------------------------------------
+
 CREATE OR REPLACE TRIGGER EMPLOYEES_SALARY_LOG 
 AFTER UPDATE OF SALARY ON EMPLOYEES 
 FOR EACH ROW 

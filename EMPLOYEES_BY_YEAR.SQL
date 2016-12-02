@@ -14,8 +14,7 @@ BEGIN
       END LOOP;
       
       DBMS_OUTPUT.PUT_LINE('*******');
-      
-   END LOOP;
+      END LOOP;
 END;
 
    

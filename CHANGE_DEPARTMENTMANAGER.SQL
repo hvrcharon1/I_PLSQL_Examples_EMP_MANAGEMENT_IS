@@ -21,8 +21,7 @@ BEGIN
   
    -- update departments table 
    UPDATE DEPARTMENTS SET MANAGER_ID = P_MANAGERID WHERE DEPARTMENT_ID = P_DEPTID;
-   
-   
+    
 EXCEPTION 
    WHEN NO_DATA_FOUND THEN
       RAISE_APPLICATION_ERROR(-20110,'Employee is not found!');

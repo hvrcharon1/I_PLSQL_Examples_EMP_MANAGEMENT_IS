@@ -1,0 +1,35 @@
+CREATE OR REPLACE PROCEDURE CHANGE_DEPARTMENT_MANAGER
+(P_DEPTID NUMBER, P_MANAGERID NUMBER)
+IS
+ V_DEPTID DEPARTMENTS.DEPARTMENT_ID%TYPE;
+ V_COUNT  NUMBER(1);
+BEGIN
+
+   -- does department exist?
+   SELECT COUNT(*) INTO V_COUNT FROM DEPARTMENTS WHERE DEPARTMENT_ID = P_DEPTID;
+   
+   IF  V_COUNT = 0 THEN
+      RAISE_APPLICATION_ERROR(-20100,'Department not found');
+   END IF;
+
+   -- check whether employee belongs to the department in question 
+   SELECT DEPARTMENT_ID INTO V_DEPTID FROM EMPLOYEES WHERE EMPLOYEE_ID = P_MANAGERID;
+   
+   IF V_DEPTID <> P_DEPTID THEN
+     RAISE_APPLICATION_ERROR(-20111,'Employee does not belong to department he is supposed to head');
+   END IF;   
+  
+   -- update departments table 
+   UPDATE DEPARTMENTS SET MANAGER_ID = P_MANAGERID WHERE DEPARTMENT_ID = P_DEPTID;
+   
+   
+EXCEPTION 
+   WHEN NO_DATA_FOUND THEN
+      RAISE_APPLICATION_ERROR(-20110,'Employee is not found!');
+END;
+
+Calling Procedure
+=================
+BEGIN
+   CHANGE_DEPARTMENT_MANAGER(100,110);
+END;

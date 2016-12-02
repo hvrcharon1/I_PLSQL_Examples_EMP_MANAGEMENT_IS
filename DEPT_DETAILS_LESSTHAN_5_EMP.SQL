@@ -1,0 +1,39 @@
+SET SERVEROUTPUT ON
+DECLARE 
+  V_DEPTID        DEPARTMENTS.DEPARTMENT_ID%TYPE := 10;
+  V_MAX_DEPTID    DEPARTMENTS.DEPARTMENT_ID%TYPE;
+  V_COUNT         NUMBER(3);
+  V_DEPT_NAME     DEPARTMENTS.DEPARTMENT_NAME%TYPE;
+  V_MANGER_NAME   EMPLOYEES.FIRST_NAME%TYPE;
+  V_MANAGER_ID    DEPARTMENTS.MANAGER_ID%TYPE;
+  V_FOUND         BOOLEAN := FALSE;
+BEGIN
+  SELECT MAX(DEPARTMENT_ID) INTO V_MAX_DEPTID FROM DEPARTMEN;
+  
+  WHILE V_DEPT_ID <= V_MAX_DEPTID
+  LOOP
+  
+     -- exclude departments with manager id null
+     SELECT MANAGER_ID INTO V_MANAGER_ID FROM DEPARTMENTS WHERE DEPARTMENT_ID = V_DEPTID;
+     
+     IF V_MANAGER_ID IS NOT NULL THEN
+       -- find out no. of employees
+       SELECT COUNT(*) INTO V_COUNT FROM EMPLOYEES WHERE DEPARTMENT_ID = V_DEPTID;
+       
+       IF V_COUNT < 5 THEN
+        -- find out department details if it has less than 5 employees
+        SELECT DEPARTMENT_NAME, FIRST_NAME INTO V_DEPT_NAME, V_MANAGER_NAME FROM  EMPLOYEES e JOIN DEPARTMENTS d  ON ( d.manager_id = e.employee_id) WHERE d.department_id = v_deptid;
+        
+        DBMS_OUTPUT.PUT_LINE(V_DEPT_NAME  || ' - ' || V_MANAGER_NAME);
+        V_FOUND := TRUE;
+        EXIT;
+       END IF;
+    END IF;
+    
+    V_DEPTID := V_DEPTID + 10;
+  END LOOP;
+  
+  IF NOT V_FOUND THEN
+      DBMS_OUTPUT.PUT_LINE('No department found with less than 5 employees');
+  END IF;
+END;
